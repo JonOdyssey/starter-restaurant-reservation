@@ -5,10 +5,14 @@ const service = require("./reservations.service");
 const asyncErrorBoundry = require("../errors/asyncErrorBoundary");
 
 async function list(req, res, next) {
-  const date = req.query.date;
-  const reservations = !date ? await service.list() : await service.list(date);
-
-  res.json({ data: reservations });
+  const { date, mobile_number } = req.query;
+  if(date) {
+    res.json({ data: await service.list(date) });
+  } 
+  
+  if (mobile_number) {
+    res.json({ data: await service.listByMobileNumber(mobile_number) });
+  }
 }
 
 function hasFirstNameProperty(req, res, next) {
@@ -110,6 +114,15 @@ function hasPeopleProperty(req, res, next) {
   next();
 }
 
+function hasStatusProperty(req, res, next) {
+  const { data: { status } = {} } = req.body;
+  if (status === "seated") next({ status: 400, message: "status can not be seated!" });
+
+  if (status === "finished") next({ status: 400, message: "status can not be finished!" });
+
+  next();
+}
+
 async function create(req, res, next) {
   const { data } = req.body;
   const newReservation = await service.create(data);
@@ -131,7 +144,36 @@ function read(req, res, next) {
   res.status(200).json({ data: res.locals.reservation });
 }
 
-async function update(req, res, next) {}
+async function update(req, res, next) {
+  const { reservation_id } = req.params;
+  const updatedReservationInfo = req.body.data;
+  const updatedReservation = await service.update(reservation_id, updatedReservationInfo);
+
+  res.status(200).json({ data: updatedReservation[0] });
+}
+
+function validateStatusUpdate(req, res, next) {
+  const updatedStatus = req.body.data.status;
+  const currentStatus = res.locals.reservation.status;
+
+  if(currentStatus === "finished") next({ status: 400, message: "a finished reservation cannot be updated" });
+
+  if(!updatedStatus || updatedStatus === "") next({ status: 400, message: "Cannot update status to nothing!"});
+
+  if(updatedStatus !== "booked" && updatedStatus !== "seated" && updatedStatus !== "finished" && updatedStatus !== "cancelled") next({ status: 400, message: "Invalid: unknown status update!" })
+
+  res.locals.status = updatedStatus;
+  next();
+}
+
+async function updateStatus(req, res, next) {
+  const { reservation_id } = req.params;
+  const updatedStatus = res.locals.status;
+
+  const updateComplete = await service.updateStatus(reservation_id, updatedStatus);
+
+  res.status(200).json({ data: { status: updateComplete[0] } });
+}
 
 module.exports = {
   list: [asyncErrorBoundry(list)],
@@ -142,8 +184,23 @@ module.exports = {
     hasValidReservationTimeProperty,
     hasMobileNumberProperty,
     hasPeopleProperty,
+    hasStatusProperty,
     asyncErrorBoundry(create),
   ],
   read: [asyncErrorBoundry(validateReservationId), read],
-  update: [],
+  update: [
+    asyncErrorBoundry(validateReservationId),
+    hasFirstNameProperty,
+    hasLastNameProperty,
+    hasMobileNumberProperty,
+    hasValidReservationDateProperty,
+    hasValidReservationTimeProperty,
+    hasPeopleProperty,
+    asyncErrorBoundry(update),
+  ],
+  updateStatus: [
+    asyncErrorBoundry(validateReservationId),
+    asyncErrorBoundry(validateStatusUpdate),
+    asyncErrorBoundry(updateStatus),
+  ],
 };
