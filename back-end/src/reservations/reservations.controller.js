@@ -13,6 +13,10 @@ async function list(req, res, next) {
   if (mobile_number) {
     res.json({ data: await service.listByMobileNumber(mobile_number) });
   }
+
+  if(!date && !mobile_number) {
+    res.json({ data: await service.list() });
+  }
 }
 
 function hasFirstNameProperty(req, res, next) {

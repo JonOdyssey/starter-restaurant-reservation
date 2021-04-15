@@ -1,7 +1,13 @@
 const knex = require("../db/connection");
 
-const list = (date) => knex("reservations as r").select("*").whereNot("status", "finished").where({ "r.reservation_date": date }).orderBy("reservation_time");
-
+const list = (date) => 
+  !date
+    ? knex("reservations as r").select("*").orderBy("reservation_time")
+    : knex("reservations as r")
+        .select("*")
+        .whereNot("status", "finished")
+        .where({ "r.reservation_date": date })
+        .orderBy("reservation_time");
 
 const listByMobileNumber = (mobile_number) => knex("reservations").whereRaw("translate(mobile_number, '() -', '') like ?", `%${mobile_number.replace(/\D/g, "")}%`).orderBy("reservation_date");
 
