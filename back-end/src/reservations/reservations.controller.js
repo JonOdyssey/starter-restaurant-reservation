@@ -117,6 +117,22 @@ async function create(req, res, next) {
   res.status(201).json({ data: newReservation[0] });
 }
 
+async function validateReservationId(req, res, next) {
+  const { reservation_id } = req.params;
+  const foundReservation = await service.read(reservation_id);
+
+  if (!foundReservation) next({ status: 404, message: `${reservation_id} not found!` });
+
+  res.locals.reservation = foundReservation;
+  next();
+}
+
+function read(req, res, next) {
+  res.status(200).json({ data: res.locals.reservation });
+}
+
+async function update(req, res, next) {}
+
 module.exports = {
   list: [asyncErrorBoundry(list)],
   create: [
@@ -128,4 +144,6 @@ module.exports = {
     hasPeopleProperty,
     asyncErrorBoundry(create),
   ],
+  read: [asyncErrorBoundry(validateReservationId), read],
+  update: [],
 };

@@ -13,7 +13,22 @@ const create = (data) => {
   return knex("reservations").insert(data).returning("*");
 };
 
+const read = (reservation_id) => {
+  return knex("reservations")
+    .select("*")
+    .where("reservation_id", reservation_id)
+    .first();
+};
+
+const update = () => {};
+
+const updateStatus = (reservation_id, status) =>
+    knex('reservations').where('reservation_id', reservation_id).update({ status: status }).returning('status');
+
 module.exports = {
   list,
   create,
+  read,
+  update,
+  updateStatus,
 };
