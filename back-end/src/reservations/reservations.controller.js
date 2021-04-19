@@ -6,22 +6,26 @@ const asyncErrorBoundry = require("../errors/asyncErrorBoundary");
 
 async function list(req, res, next) {
   const { date, mobile_number } = req.query;
-  if(date) {
+  if (date) {
     res.json({ data: await service.list(date) });
-  } 
-  
+  }
+
   if (mobile_number) {
     res.json({ data: await service.listByMobileNumber(mobile_number) });
   }
 
-  if(!date && !mobile_number) {
+  if (!date && !mobile_number) {
     res.json({ data: await service.list() });
   }
 }
 
 function hasFirstNameProperty(req, res, next) {
   const { data: { first_name } = {} } = req.body;
-  if (!first_name) {
+  if (
+    !first_name ||
+    first_name === "" ||
+    first_name.replace(/\s/g, "").length === 0
+  ) {
     next({
       status: 400,
       message: "first_name REQUIRED for your reservation!",
@@ -33,7 +37,11 @@ function hasFirstNameProperty(req, res, next) {
 
 function hasLastNameProperty(req, res, next) {
   const { data: { last_name } = {} } = req.body;
-  if (!last_name) {
+  if (
+    !last_name ||
+    last_name === "" ||
+    last_name.replace(/\s/g, "").length === 0
+  ) {
     next({
       status: 400,
       message: "last_name REQUIRED for your reservation!",
@@ -120,9 +128,11 @@ function hasPeopleProperty(req, res, next) {
 
 function hasStatusProperty(req, res, next) {
   const { data: { status } = {} } = req.body;
-  if (status === "seated") next({ status: 400, message: "status can not be seated!" });
+  if (status === "seated")
+    next({ status: 400, message: "status can not be seated!" });
 
-  if (status === "finished") next({ status: 400, message: "status can not be finished!" });
+  if (status === "finished")
+    next({ status: 400, message: "status can not be finished!" });
 
   next();
 }
@@ -138,7 +148,8 @@ async function validateReservationId(req, res, next) {
   const { reservation_id } = req.params;
   const foundReservation = await service.read(reservation_id);
 
-  if (!foundReservation) next({ status: 404, message: `${reservation_id} not found!` });
+  if (!foundReservation)
+    next({ status: 404, message: `${reservation_id} not found!` });
 
   res.locals.reservation = foundReservation;
   next();
@@ -151,7 +162,10 @@ function read(req, res, next) {
 async function update(req, res, next) {
   const { reservation_id } = req.params;
   const updatedReservationInfo = req.body.data;
-  const updatedReservation = await service.update(reservation_id, updatedReservationInfo);
+  const updatedReservation = await service.update(
+    reservation_id,
+    updatedReservationInfo
+  );
 
   res.status(200).json({ data: updatedReservation[0] });
 }
@@ -160,11 +174,19 @@ function validateStatusUpdate(req, res, next) {
   const updatedStatus = req.body.data.status;
   const currentStatus = res.locals.reservation.status;
 
-  if(currentStatus === "finished") next({ status: 400, message: "a finished reservation cannot be updated" });
+  if (currentStatus === "finished")
+    next({ status: 400, message: "a finished reservation cannot be updated" });
 
-  if(!updatedStatus || updatedStatus === "") next({ status: 400, message: "Cannot update status to nothing!"});
+  if (!updatedStatus || updatedStatus === "")
+    next({ status: 400, message: "Cannot update status to nothing!" });
 
-  if(updatedStatus !== "booked" && updatedStatus !== "seated" && updatedStatus !== "finished" && updatedStatus !== "cancelled") next({ status: 400, message: "Invalid: unknown status update!" })
+  if (
+    updatedStatus !== "booked" &&
+    updatedStatus !== "seated" &&
+    updatedStatus !== "finished" &&
+    updatedStatus !== "cancelled"
+  )
+    next({ status: 400, message: "Invalid: unknown status update!" });
 
   res.locals.status = updatedStatus;
   next();
@@ -174,7 +196,10 @@ async function updateStatus(req, res, next) {
   const { reservation_id } = req.params;
   const updatedStatus = res.locals.status;
 
-  const updateComplete = await service.updateStatus(reservation_id, updatedStatus);
+  const updateComplete = await service.updateStatus(
+    reservation_id,
+    updatedStatus
+  );
 
   res.status(200).json({ data: { status: updateComplete[0] } });
 }

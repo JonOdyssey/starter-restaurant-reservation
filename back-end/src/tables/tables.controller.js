@@ -9,7 +9,11 @@ async function list(req, res, next) {
 
 function hasTableNameProperty(req, res, next) {
   const { data: { table_name } = {} } = req.body;
-  if (!table_name || table_name === "") {
+  if (
+    !table_name ||
+    table_name === "" ||
+    table_name.replace(/\s/g, "").length === 0
+  ) {
     next({
       status: 400,
       message: "table_name is REQUIRED",
@@ -119,7 +123,8 @@ async function update(req, res, next) {
 async function destroy(req, res, next) {
   const foundTable = res.locals.table;
 
-  if (!foundTable.occupied) next({ status: 400, message: `${foundTable.table_name} is not occupied.`});
+  if (!foundTable.occupied)
+    next({ status: 400, message: `${foundTable.table_name} is not occupied.` });
 
   const deletedTable = await service.destroy(foundTable.table_id);
   await reservationService.updateStatus(foundTable.reservation_id, "finished");

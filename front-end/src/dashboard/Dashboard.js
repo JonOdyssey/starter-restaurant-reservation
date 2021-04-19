@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTablesRequest } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { previous, next } from "../utils/date-time";
 import ReservationCard from "./ReservationCard";
+import TableCard from "./TableCard";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -17,6 +18,8 @@ function Dashboard(props) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [date, setDate] = useState(query.get("date") || props.date);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
@@ -26,6 +29,9 @@ function Dashboard(props) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTablesRequest(abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -39,9 +45,22 @@ function Dashboard(props) {
         <button onClick={() => setDate(props.date)}>Today</button>
       </div>
       <ErrorAlert error={reservationsError} />
-      {reservations.map((reservation, index) => (
-        <ReservationCard reservation={reservation} key={index} />
-      ))}
+      <div>
+        <h3>Reservations</h3>
+        {reservations.map((reservation, index) => (
+          <ReservationCard reservation={reservation} key={index} />
+        ))}
+      </div>
+
+      <div>
+        <h3>Tables</h3>
+        <div className="d-flex justify-content-center mb-1 flex-wrap">
+          {tables.map((table) => (
+            <TableCard key={table.table_id} table={table} />
+          ))}
+        </div>
+      </div>
+      <ErrorAlert error={tablesError} />
     </main>
   );
 }

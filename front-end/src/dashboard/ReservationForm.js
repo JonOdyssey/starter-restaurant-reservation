@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { createReservationRequest } from "../utils/db-requests";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export default function ReservationForm({ onSubmit }) {
+export default function ReservationForm() {
   const history = useHistory();
   const [reservationError, setReservationError] = useState(null);
 
@@ -32,7 +32,10 @@ export default function ReservationForm({ onSubmit }) {
       history.push(`/dashboard?date=${reservationData.reservation_date}`);
       setReservationData({ ...initialState });
     } catch (err) {
-      setReservationError({ message: err.response.data.error });
+      setReservationError({
+        status: err.response.status,
+        message: err.response.data.error,
+      });
     }
   };
 
