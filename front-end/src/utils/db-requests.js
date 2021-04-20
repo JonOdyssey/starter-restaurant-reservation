@@ -33,3 +33,12 @@ export async function readReservationRequest(id) {
   const { data } = await axios.get(`${API_BASE_URL}/reservations/${id}`);
   return data.data;
 }
+
+export async function updateTableStatusToFinished(table_id) {
+  return await axios
+    .delete(`${API_BASE_URL}/tables/${table_id}/seat`)
+    .then((response) =>
+      response.status === 200 ? window.location.reload() : null
+    )
+    .catch(console.error);
+}

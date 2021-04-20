@@ -47,7 +47,7 @@ export default function ReservationCard({ reservation }) {
               <span className="oi oi-pencil" />
               &nbsp; Edit
             </Link>
-            <button onClick={handleCancel} className="cancelButton">
+            <button onClick={handleCancel} className="cancelButton" data-reservation-id-cancel={reservation.reservation_id}> 
               <span className="oi oi-x" />
               &nbsp; Cancel
             </button>
