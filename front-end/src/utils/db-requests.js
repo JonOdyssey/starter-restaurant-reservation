@@ -29,9 +29,8 @@ export async function updateTableRequest(table_id, reservation_id) {
   );
 }
 
-export async function readReservationRequest(id) {
-  const { data } = await axios.get(`${API_BASE_URL}/reservations/${id}`);
-  return data.data;
+export async function readReservationRequest(reservation_id) {
+  return await axios.get(`${API_BASE_URL}/reservations/${reservation_id}`);
 }
 
 export async function updateTableStatusToFinished(table_id) {
@@ -41,4 +40,8 @@ export async function updateTableStatusToFinished(table_id) {
       response.status === 200 ? window.location.reload() : null
     )
     .catch(console.error);
+}
+
+export async function updateReservationRequest(reservation_id, updatedData) {
+  return await axios.put(`${API_BASE_URL}/reservations/${reservation_id}`, updatedData);
 }

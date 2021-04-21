@@ -1,8 +1,15 @@
 import React from "react";
 import { updateTableStatusToFinished } from "../utils/db-requests";
 
+/**
+ * Table Card Component
+ * @param table
+ * Table object containing table information
+ * @returns {JSX.Element}
+ */
+
 export default function TableCard({ table }) {
-  const handleClick = async (e) => {
+  const handleFinish = (e) => {
     e.preventDefault();
 
     if (
@@ -10,11 +17,7 @@ export default function TableCard({ table }) {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      try {
-        await updateTableStatusToFinished(table.table_id);
-      } catch (err) {
-        console.error(err);
-      }
+      updateTableStatusToFinished(table.table_id);
     }
   };
 
@@ -30,7 +33,7 @@ export default function TableCard({ table }) {
               <button
                 data-table-id-finish={table.table_id}
                 type="finish"
-                onClick={handleClick}
+                onClick={handleFinish}
                 className="sfButton"
               >
                 Finish

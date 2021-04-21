@@ -12,11 +12,7 @@ import { deleteReservationRequest } from "../utils/db-requests";
 export default function ReservationCard({ reservation }) {
   const handleCancel = (e) => {
     e.preventDefault();
-    if (
-      window.confirm(
-        "Cancel reservation? This cannot be undone."
-      )
-    ) {
+    if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
       deleteReservationRequest(reservation.reservation_id);
     }
   };
@@ -30,7 +26,9 @@ export default function ReservationCard({ reservation }) {
         <p>{reservation.people}</p>
         <p>{reservation.reservation_time}</p>
         <p>{reservation.mobile_number}</p>
-        <p>{reservation.status}</p>
+        <p data-reservation-id-status={reservation.reservation_id}>
+          {reservation.status}
+        </p>
         {reservation.status === "booked" ? (
           <div className="row">
             <Link
@@ -47,7 +45,11 @@ export default function ReservationCard({ reservation }) {
               <span className="oi oi-pencil" />
               &nbsp; Edit
             </Link>
-            <button onClick={handleCancel} className="cancelButton" data-reservation-id-cancel={reservation.reservation_id}> 
+            <button
+              onClick={handleCancel}
+              className="cancelButton"
+              data-reservation-id-cancel={reservation.reservation_id}
+            >
               <span className="oi oi-x" />
               &nbsp; Cancel
             </button>

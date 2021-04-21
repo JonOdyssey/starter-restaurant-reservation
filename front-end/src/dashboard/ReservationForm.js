@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservationRequest } from "../utils/db-requests";
+import {
+  createReservationRequest,
+  updateReservationRequest,
+} from "../utils/db-requests";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export default function ReservationForm() {
+export default function ReservationForm({
+  type,
+  reservationUpdate,
+  reservation_id,
+}) {
   const history = useHistory();
   const [reservationError, setReservationError] = useState(null);
 
@@ -18,17 +25,40 @@ export default function ReservationForm() {
 
   const [reservationData, setReservationData] = useState({ ...initialState });
 
+  useEffect(loadDashboard, [type, reservationUpdate]);
+
+  function loadDashboard() {
+    if (type === "edit") {
+      const abortController = new AbortController();
+      setReservationError(null);
+      setReservationData(reservationUpdate);
+      
+      return () => abortController.abort();
+    }
+    return;
+  }
+
   const handleChange = (e) => {
+    const value =
+      e.target.type === "number" ? Number(e.target.value) : e.target.value;
+
     setReservationData({
       ...reservationData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createReservationRequest({ data: reservationData });
+      if (type === "edit") {
+        await updateReservationRequest(reservation_id, {
+          data: reservationData,
+        });
+      } else {
+        await createReservationRequest({ data: reservationData });
+      }
+
       history.push(`/dashboard?date=${reservationData.reservation_date}`);
       setReservationData({ ...initialState });
     } catch (err) {
@@ -46,7 +76,7 @@ export default function ReservationForm() {
 
   return (
     <>
-      <h2>Create a new reservation:</h2>
+      <div>{!type ? <h2>Create a new reservation:</h2> : null}</div>
       <form className="row" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="first_name">
@@ -56,6 +86,7 @@ export default function ReservationForm() {
               onChange={handleChange}
               className="form-control"
               placeholder="Enter first name"
+              defaultValue={reservationData.first_name}
               required={true}
             />
           </label>
@@ -66,6 +97,7 @@ export default function ReservationForm() {
               onChange={handleChange}
               className="form-control"
               placeholder="Enter last name"
+              defaultValue={reservationData.last_name}
               required={true}
             />
           </label>
@@ -77,6 +109,7 @@ export default function ReservationForm() {
               onChange={handleChange}
               className="form-control"
               placeholder="xxx-xxx-xxxx"
+              defaultValue={reservationData.mobile_number}
               required={true}
             />
           </label>
@@ -89,6 +122,7 @@ export default function ReservationForm() {
               className="form-control"
               placeholder="yyyy-mm-dd"
               pattern="\d{4}-\d{2}-\d{2}"
+              defaultValue={reservationData.reservation_date}
               required={true}
             />
           </label>
@@ -101,6 +135,7 @@ export default function ReservationForm() {
               className="form-control"
               placeholder="hh:mm"
               pattern="[0-9]{2}:[0-9]{2}"
+              defaultValue={reservationData.reservation_time}
               required={true}
             />
           </label>
@@ -109,9 +144,10 @@ export default function ReservationForm() {
             <input
               name="people"
               type="number"
+              onChange={handleChange}
               min="1"
-              defaultValue="1"
               className="form-control"
+              defaultValue={reservationData.people}
               required={true}
             />
           </label>
