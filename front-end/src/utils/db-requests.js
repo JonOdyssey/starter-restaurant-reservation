@@ -33,15 +33,17 @@ export async function readReservationRequest(reservation_id) {
   return await axios.get(`${API_BASE_URL}/reservations/${reservation_id}`);
 }
 
-export async function updateTableStatusToFinished(table_id) {
-  return await axios
-    .delete(`${API_BASE_URL}/tables/${table_id}/seat`)
-    .then((response) =>
-      response.status === 200 ? window.location.reload() : null
-    )
-    .catch(console.error);
+export async function updateTableStatus(table_id) {
+  try {
+    return await axios.delete(`${API_BASE_URL}/tables/${table_id}/seat`);
+  } catch (error) {
+    return { message: error.response.data.error };
+  }
 }
 
 export async function updateReservationRequest(reservation_id, updatedData) {
-  return await axios.put(`${API_BASE_URL}/reservations/${reservation_id}`, updatedData);
+  return await axios.put(
+    `${API_BASE_URL}/reservations/${reservation_id}`,
+    updatedData
+  );
 }

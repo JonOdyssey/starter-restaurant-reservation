@@ -1,5 +1,5 @@
 import React from "react";
-import { updateTableStatusToFinished } from "../utils/db-requests";
+import { updateTableStatus } from "../utils/db-requests";
 
 /**
  * Table Card Component
@@ -9,7 +9,7 @@ import { updateTableStatusToFinished } from "../utils/db-requests";
  */
 
 export default function TableCard({ table }) {
-  const handleFinish = (e) => {
+  const handleFinish = async (e) => {
     e.preventDefault();
 
     if (
@@ -17,33 +17,31 @@ export default function TableCard({ table }) {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      updateTableStatusToFinished(table.table_id);
+      const response = await updateTableStatus(table.table_id);
+      if (response.status === 200) window.location.reload();
     }
   };
 
   return (
-    <>
-      <div className="card">
-        <div>
-          <p>{table.table_name}</p>
-          <p>{table.capacity}</p>
-          {table.reservation_id ? (
-            <div>
-              <h6 data-table-id-status={table.table_id}>Occupied</h6>
-              <button
-                data-table-id-finish={table.table_id}
-                type="finish"
-                onClick={handleFinish}
-                className="sfButton"
-              >
-                Finish
-              </button>
-            </div>
-          ) : (
-            <h6 data-table-id-status={table.table_id}>Free</h6>
-          )}
-        </div>
+    <div className="card">
+      <div className="card-body">
+        <p>{table.table_name}</p>
+        <p>{table.capacity}</p>
+        {!table.reservation_id ? (
+          <p data-table-id-status={table.table_id}>free</p>
+        ) : (
+          <p data-table-id-status={table.table_id}>occupied</p>
+        )}
+        {table.reservation_id ? (
+          <button
+            data-table-id-finish={table.table_id}
+            onClick={handleFinish}
+            className="sfButton"
+          >
+            Finish
+          </button>
+        ) : null}
       </div>
-    </>
+    </div>
   );
 }

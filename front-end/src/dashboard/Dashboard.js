@@ -44,22 +44,23 @@ function Dashboard(props) {
         <button onClick={() => setDate(next(date))}>Tomorrow</button>
         <button onClick={() => setDate(props.date)}>Today</button>
       </div>
-      <ErrorAlert error={reservationsError} />
       <div>
-        <h3>Reservations</h3>
+        <h3>Tables</h3>
+        {tables.map((table, index) => (
+          <TableCard table={table} key={index} />
+        ))}
+      </div>
+      <div>
+        {reservations.length === 0 ? (
+          <h3>No Reservations today!</h3>
+        ) : (
+          <h3>Reservations</h3>
+        )}
         {reservations.map((reservation, index) => (
           <ReservationCard reservation={reservation} key={index} />
         ))}
       </div>
-
-      <div>
-        <h3>Tables</h3>
-        <div className="d-flex justify-content-center mb-1 flex-wrap">
-          {tables.map((table) => (
-            <TableCard key={table.table_id} table={table} />
-          ))}
-        </div>
-      </div>
+      <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
     </main>
   );
