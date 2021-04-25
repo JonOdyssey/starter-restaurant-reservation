@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationCard from "./ReservationCard";
 import { listTablesRequest } from "../utils/api";
 import {
   updateTableRequest,
@@ -26,7 +25,7 @@ export default function ReservationSeating() {
     setTablesError(null);
 
     readReservationRequest(reservation_id)
-      .then(setReservationData)
+      .then(({ data: { data } = {} }) => setReservationData(data))
       .catch((err) =>
         setReservationError({
           status: err.response.status,
@@ -72,39 +71,46 @@ export default function ReservationSeating() {
   return (
     <>
       <div>
-        {reservationData.reservation_time}
-        <ReservationCard reservation={reservationData} />
-        <form onSubmit={handleSubmit} className="row">
-          <div>
-            <label htmlFor="table_id">
-              Select a table to sit guests:
-              <select
-                id="table_id"
-                name="table_id"
-                onChange={handleChange}
-                value={tableId}
-              >
-                <option>-- Select table --</option>
-                {tablesData.map((table) => {
-                  const { table_id, table_name, capacity } = table;
-                  return (
-                    <option key={table_id} value={table_id}>
-                      {`${table_name} - ${capacity}`}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
-          </div>
-          <div>
-            <button type="submit" className="btn">
-              Submit
-            </button>
-            <button onClick={handleCancel} className="btn">
-              Cancel
-            </button>
-          </div>
-        </form>
+        <h1 className="display-3 seating">
+          Now Seating Reservation for&nbsp;
+          <strong>{`${reservationData.first_name} ${reservationData.last_name}`}</strong>
+        </h1>
+        <div className="flex-container">
+          <form onSubmit={handleSubmit} className="col">
+            <div className="pt-2 m-1">
+              <label htmlFor="table_id" className="seating-label">
+                Select a table to sit guests:&nbsp;
+                <select
+                  id="table_id"
+                  name="table_id"
+                  onChange={handleChange}
+                  value={tableId}
+                >
+                  <option>-- Select table --</option>
+                  {tablesData.map((table) => {
+                    const { table_id, table_name, capacity } = table;
+                    return (
+                      <option key={table_id} value={table_id}>
+                        {`${table_name} - ${capacity}`}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+            </div>
+            <div>
+              <button type="submit" className="btn submit-btn m-1">
+                <span className="submit-icon" />
+                &nbsp;Submit
+              </button>
+              <button onClick={handleCancel} className="btn delete-btn m-1">
+                <span className="delete-icon" />
+                &nbsp;Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={reservationError} />
       </div>

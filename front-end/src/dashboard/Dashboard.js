@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { listReservations, listTablesRequest } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { previous, next } from "../utils/date-time";
-import ReservationCard from "./ReservationCard";
-import TableCard from "./TableCard";
+import ReservationCard from "../reservations/ReservationCard";
+import TableCard from "../tables/TableCard";
 import ErrorAlert from "../layout/ErrorAlert";
+import { formatDate } from "../utils/format-to-readable-data";
 
+import "../layout/Layout.css";
 /**
  * Defines the dashboard page.
  * @param date
@@ -37,28 +39,47 @@ function Dashboard(props) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date: {date} </h4>
-        <button onClick={() => setDate(previous(date))}>Yesterday</button>
-        <button onClick={() => setDate(next(date))}>Tomorrow</button>
-        <button onClick={() => setDate(props.date)}>Today</button>
-      </div>
       <div>
-        <h3>Tables</h3>
-        {tables.map((table, index) => (
-          <TableCard table={table} key={index} />
-        ))}
+        <div className="mb-3">
+          <h1 className="display-3">Dashboard</h1>
+          <h4 className=" display-4 mb-0">
+            Reservations for date: <u>{formatDate(date)}</u>
+          </h4>
+        </div>
+      </div>
+      <div className="mb-3 row container">
+        <button className="date-button" onClick={() => setDate(previous(date))}>
+          <span className="yesterday">&nbsp;Yesterday</span>
+        </button>
+        <button
+          className="mx-2 date-button"
+          onClick={() => setDate(props.date)}
+        >
+          <span className="today">Today&nbsp;</span>
+        </button>
+        <button className="date-button" onClick={() => setDate(next(date))}>
+          <span className="tomorrow">Tomorrow&nbsp;</span>
+        </button>
       </div>
       <div>
         {reservations.length === 0 ? (
-          <h3>No Reservations today!</h3>
+          <h3 className="display-4">No Reservations today!</h3>
         ) : (
-          <h3>Reservations</h3>
+          <h3 className="display-4">Reservations</h3>
         )}
-        {reservations.map((reservation, index) => (
-          <ReservationCard reservation={reservation} key={index} />
-        ))}
+        <div className="row">
+          {reservations.map((reservation, index) => (
+            <ReservationCard reservation={reservation} key={index} />
+          ))}
+        </div>
+      </div>
+      <div>
+        <h3 className="display-4">Tables</h3>
+        <div className="row">
+          {tables.map((table, index) => (
+            <TableCard table={table} key={index} />
+          ))}
+        </div>
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />

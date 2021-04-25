@@ -58,5 +58,25 @@
     "people": 4,
     "created_at": "2020-12-10T08:31:32.326Z",
     "updated_at": "2020-12-10T08:31:32.326Z"
+  },
+  {
+    "first_name": "Bobby",
+    "last_name": "Fernandez",
+    "mobile_number": "012-345-6789",
+    "reservation_date": "2021-04-22",
+    "reservation_time": "18:00",
+    "people": 4,
+    "created_at": "2020-12-10T08:31:32.326Z",
+    "updated_at": "2020-12-10T08:31:32.326Z"
+  },
+  {
+    "first_name": "Wanda",
+    "last_name": "Vision",
+    "mobile_number": "012-345-6789",
+    "reservation_date": "2021-04-22",
+    "reservation_time": "18:00",
+    "people": 4,
+    "created_at": "2020-12-10T08:31:32.326Z",
+    "updated_at": "2020-12-10T08:31:32.326Z"
   }
 ]

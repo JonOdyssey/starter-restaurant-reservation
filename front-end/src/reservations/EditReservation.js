@@ -35,14 +35,14 @@ export default function EditReservation() {
 
   return (
     <>
+      <h2 className="display-4">Edit Reservation</h2>
       <div>
-        <h2> Edit Reservation</h2>
+        <ErrorAlert error={reservationError} />
         <ReservationForm
           type="edit"
           reservationUpdate={foundReservation}
           reservation_id={reservation_id}
         />
-        <ErrorAlert error={reservationError} />
       </div>
     </>
   );

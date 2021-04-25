@@ -1,4 +1,341 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
+
+/* Background */
+.main-background {
+  background-color: #d2ffee;
+}
+
+/* Sidebar & Form styling */
 .side-bar {
-  background-color: #393a44;
+  background-color: #065143;
   min-width: 200px;
+  max-width: 200px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+@media all and (max-width: 992px) {
+  .side-bar {
+    min-width: 100vw;
+    min-height: 225px;
+    border-bottom: solid 4px black;
+    border-right: none;
+  }
+
+  input {
+    min-width: 300px;
+    max-width: 300px;
+  }
+}
+
+@media all and (min-width: 992px) {
+  form {
+    display: block;
+  }
+  input {
+    min-width: 200px;
+    max-width: 200px;
+  }
+  label {
+    padding: 5px;
+  }
+}
+
+.seating-label {
+  font-size: 20px;
+}
+
+.form-text {
+  font-size: 20px;
+}
+
+/* Yesterday, Today, Tomorrow Button Style & Transition */
+.date-button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #076957;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px;
+  width: 150px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.date-button:hover {
+  background-color: #4e9c7b;
+}
+
+.date-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.date-button span.yesterday {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.date-button span.yesterday:after {
+  content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-arrow-left-circle' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z'/></svg>");
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: -20px;
+  transition: 0.5s;
+}
+
+.date-button:hover span.yesterday {
+  padding-left: 25px;
+}
+
+.date-button:hover span.yesterday:after {
+  opacity: 1;
+  left: 0;
+}
+
+.date-button span.today {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.date-button span.today:after {
+  content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-arrow-down-circle' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z'/></svg>");
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.date-button:hover span.today {
+  padding-right: 25px;
+}
+
+.date-button:hover span.today:after {
+  opacity: 1;
+  right: 0;
+}
+
+.date-button span.tomorrow {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.date-button span.tomorrow:after {
+  content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-arrow-right-circle' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z'/></svg>");
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.date-button:hover span.tomorrow {
+  padding-right: 25px;
+}
+
+.date-button:hover span.tomorrow:after {
+  opacity: 1;
+  right: 0;
+}
+
+/* Submit, Edit, Delete, Search, Finish Button Style */
+
+.submit-btn,
+.bi-check-circle {
+  transition: ease-out;
+  background-color: #38a700;
+  font-weight: 650;
+  color: #ebffe0;
+  border-width: 0px 2px 1px 0px;
+  border-color: #277500;
+}
+
+.submit-btn:hover,
+.submit-btn:hover .bi-check-circle {
+  transition: ease-out;
+  background-color: #31d843;
+  color: black;
+  border-width: 1px 0px 0px 2px;
+  border-color: #277500;
+}
+
+.submit-btn:active,
+.submit-btn:active .bi-check-circle {
+  transition: ease-in;
+  background-color: #386c0b;
+  color: #ebffe0;
+  border-width: 1px 0px 0px 2px;
+  border-color: #386c0b;
+  /* outline: none; */
+}
+
+.submit-btn:focus,
+.submit-btn:focus .bi-check-circle {
+  outline: none;
+  box-shadow: none;
+}
+
+.edit-btn,
+.bi-pencil-square {
+  transition: ease-out;
+  background-color: #219ebc;
+  font-weight: 650;
+  color: #edf9fc;
+  border-width: 0px 2px 1px 0px;
+  border-color: #176f85;
+}
+
+.edit-btn:hover,
+.edit-btn:hover .bi-pencil-square {
+  transition: ease-out;
+  background-color: #8ecae6;
+  color: black;
+  border-width: 1px 0px 0px 2px;
+  border-color: #176f85;
+}
+
+.edit-btn:active,
+.edit-btn:active .bi-pencil-square {
+  transition: ease-in;
+  background-color: #468ea0;
+  color: #edf9fc;
+  border-width: 1px 0px 0px 2px;
+  border-color: #468ea0;
+}
+
+.edit-btn:focus,
+.edit-btn:focus .bi-pencil-square {
+  outline: none;
+  box-shadow: none;
+}
+
+.delete-btn,
+.bi-delete-btn {
+  transition: ease-out;
+  background-color: #d20f46;
+  font-weight: 650;
+  color: #f9ecef;
+  border-width: 0px 2px 1px 0px;
+  border-color: #7f182f;
+}
+
+.delete-btn:hover,
+.delete-btn:hover .bi-x-circle-fill {
+  transition: ease-out;
+  background-color: #f24073;
+  color: black;
+  border-width: 1px 0px 0px 2px;
+  border-color: #7f182f;
+}
+
+.delete-btn:active,
+.delete-btn:active .bi-x-circle-fill {
+  transition: ease-in;
+  background-color: #86092c;
+  color: #f9ecef;
+  border-width: 1px 0px 0px 2px;
+  border-color: #86092c;
+}
+
+.delete-btn:focus,
+.delete-btn:focus .bi-x-circle-fill {
+  outline: none;
+  box-shadow: none;
+}
+
+.search-btn,
+.bi-eye {
+  transition: ease-out;
+  background-color: #f38613;
+  font-weight: 650;
+  color: #fff2c2;
+  border-width: 0px 2px 1px 0px;
+  border-color: #ac6314;
+}
+
+.search-btn:hover,
+.search-btn:hover .bi-eye {
+  transition: ease-out;
+  background-color: #f8aa67;
+  color: black;
+  border-width: 1px 0px 0px 2px;
+  border-color: #ac6314;
+}
+
+.search-btn:active,
+.search-btn:active .bi-eye {
+  transition: ease-in;
+  background-color: #634d35;
+  color: #fff2c2;
+  border-width: 1px 0px 0px 2px;
+  border-color: #634d35;
+}
+
+.search-btn:focus,
+.search-btn:focus .bi-eye {
+  outline: none;
+  box-shadow: none;
+}
+
+.finish-btn,
+.bi-hand-thumbs-up-fill {
+  transition: ease-out;
+  background-color: #e60400;
+  font-weight: 650;
+  color: #fff5f5;
+  border-width: 0px 2px 1px 0px;
+  border-color: #9f0a08;
+}
+
+.finish-btn:hover,
+.finish-btn:hover .bi-hand-thumbs-up-fill {
+  transition: ease-out;
+  background-color: #7b0d0c;
+  color: #ffb4b3;
+  border-width: 1px 0px 0px 2px;
+  border-color: #9f0a08;
+}
+
+.finish-btn:active,
+.finish-btn:active .bi-hand-thumbs-up-fill {
+  transition: ease-in;
+  background-color: #57100f;
+  color: #fff5f5;
+  border-width: 1px 0px 0px 2px;
+  border-color: #57100f;
+}
+
+.finish-btn:focus,
+.finish-btn:focus .bi-hand-thumbs-up-fill {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Text Styling */
+h1,
+h2 {
+  margin-top: 5px;
+}
+
+.seating {
+  font-size: 50px;
+}
+
+u {
+  border-bottom: 2px solid currentColor; /* Or whatever color you want */
+  text-decoration: none;
+  position: static;
 }

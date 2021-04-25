@@ -9,7 +9,7 @@ export default function TableForm() {
 
   const initialState = {
     table_name: "",
-    capacity: 0,
+    capacity: 1,
   };
   const [tableData, setTableData] = useState({ ...initialState });
 
@@ -47,11 +47,12 @@ export default function TableForm() {
 
   return (
     <>
-      <div>
-        <h2>Create a new table:</h2>
-        <form className="row" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="table_name">
+      <h2 className="display-4">Create New Table:</h2>
+      <ErrorAlert error={tableError} />
+      <form onSubmit={handleSubmit}>
+        <div className="col">
+          <div className="row">
+            <label htmlFor="table_name" className="col-lg-3 mr-3 form-text">
               Table Name:
               <input
                 name="table_name"
@@ -60,36 +61,38 @@ export default function TableForm() {
                 onChange={handleChange}
                 className="form-control"
                 placeholder="Enter table name"
-                value={tableData.table_name}
+                defaultValue={tableData.table_name}
                 required={true}
               />
             </label>
           </div>
-          <div className="form-group">
-            <label htmlFor="capacity">
+          <div className="row">
+            <label htmlFor="capacity" className="col-lg-3 mr-3 form-text">
               Table Capacity:
               <input
                 name="capacity"
                 id="capacity"
                 type="number"
                 onChange={handleChange}
+                min="1"
                 className="form-control"
-                value={tableData.capacity}
+                defaultValue={tableData.capacity}
                 required={true}
               />
             </label>
           </div>
-          <div>
-            <button onClick={handleCancel} type="cancel" className="btn">
-              Cancel
+          <div className="row">
+            <button type="submit" className="btn submit-btn m-2">
+              <span className="submit-icon" />
+              &nbsp;Submit
             </button>
-            <button type="submit" className="btn">
-              Submit
+            <button onClick={handleCancel} type="cancel" className="btn delete-btn m-2">
+              <span className="delete-icon" />
+              &nbsp;Cancel
             </button>
           </div>
-        </form>
-        <ErrorAlert error={tableError} />
-      </div>
+        </div>
+      </form>
     </>
   );
 }
