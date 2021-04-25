@@ -3,6 +3,11 @@ This is a Full Stack Application for a Restaurant Reservation System. Follow the
 
 ![dashboard with reservation cards](https://github.com/JonOdyssey/starter-restaurant-reservation/blob/main/front-end/public/screenshots/reservation-dashboard-1.png)
 
+
+![dashboard with no reservation cards](https://github.com/JonOdyssey/starter-restaurant-reservation/blob/main/front-end/public/screenshots/reservation-dashboard-2.png)
+
+1[form for new reservations](https://github.com/JonOdyssey/starter-restaurant-reservation/blob/main/front-end/public/screenshots/reservation-new-1.png)
+
 ## Installation
 1. Fork / clone this repository.
 1. Run `npm install`.
