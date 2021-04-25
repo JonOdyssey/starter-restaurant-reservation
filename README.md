@@ -1,9 +1,7 @@
 # Capstone: Restaurant Reservation System
 This is a Full Stack Application for a Restaurant Reservation System. Follow the instructions below. Employees can book, seat, edit, and delete reservations and tables.
 
-![dashboard with reservation cards](./frontend/public/screenshots/reservation-dashboard-1.png)
-<!-- ![[`./frontend/public/screenshots/reservation-dashboard-1.png`]] -->
-
+![dashboard with reservation cards](https://github.com/JonOdyssey/starter-restaurant-reservation/blob/main/front-end/public/screenshots/reservation-dashboard-1.png)
 
 ## Installation
 1. Fork / clone this repository.
